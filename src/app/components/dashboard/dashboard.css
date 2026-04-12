@@ -1,0 +1,163 @@
+/* GLOBAL */
+body {
+  background: #f4f6fb;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* CONTAINER */
+.container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 10px;
+}
+
+/* CARD */
+.card {
+  background: #ffffff;
+  padding: 25px;
+  margin-bottom: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* HEADINGS */
+h2 {
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* FORM */
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  outline: none;
+  transition: 0.2s;
+}
+
+input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+/* BUTTON BASE */
+button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+/* PRIMARY */
+.primary-btn {
+  background: #007bff;
+  color: white;
+}
+
+.primary-btn:hover {
+  background: #0056b3;
+}
+
+/* SECONDARY */
+.secondary-btn {
+  background: #6c757d;
+  color: white;
+  margin-left: 10px;
+}
+
+.secondary-btn:hover {
+  background: #545b62;
+}
+
+/* EDIT */
+.edit-btn {
+  background: #f59e0b;
+  color: white;
+}
+
+.edit-btn:hover {
+  background: #d97706;
+}
+
+/* DELETE */
+.delete-btn {
+  background: #ef4444;
+  color: white;
+  margin-left: 5px;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+}
+
+/* TABLE */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th {
+  text-align: left;
+  padding: 12px;
+  background: #f1f3f6;
+  font-weight: 600;
+  color: #444;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+/* ROW HOVER */
+tr:hover {
+  background: #f9fafc;
+}
+
+/* PAGINATION */
+.pagination {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* DISABLED BUTTON */
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* MESSAGE (if you still use text msg) */
+.message {
+  padding: 10px;
+  background: #d1fae5;
+  color: #065f46;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.filters input,
+.filters select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}

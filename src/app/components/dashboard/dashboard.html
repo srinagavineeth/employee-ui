@@ -1,0 +1,92 @@
+<div class="container">
+
+  <!-- FORM CARD -->
+  <div class="card">
+    <h2>{{ isEditMode ? 'Update Employee' : 'Add Employee' }}</h2>
+
+    <div class="form-row">
+      <input type="text" placeholder="Name" [(ngModel)]="newEmployee.name">
+      <input type="email" placeholder="Email" [(ngModel)]="newEmployee.email">
+      <input type="text" placeholder="Department" [(ngModel)]="newEmployee.department">
+      <input type="number" placeholder="Salary" [(ngModel)]="newEmployee.salary">
+    </div>
+
+    <button (click)="submitEmployee()" class="primary-btn">
+      {{ isEditMode ? 'Update' : 'Add' }}
+    </button>
+
+    <button *ngIf="isEditMode" (click)="resetForm()" class="secondary-btn">
+      Cancel
+    </button>
+  </div>
+
+  <!-- TABLE CARD -->
+  <div class="card">
+    <h2>Employees</h2>
+
+    <div *ngIf="loading">Loading...</div>
+
+    <div class="filters">
+
+  <input 
+    type="text"
+    placeholder="Search name/email"
+    [(ngModel)]="searchText"
+  />
+
+  <select [(ngModel)]="selectedDepartment">
+    <option value="">All Departments</option>
+    <option *ngFor="let dept of departments" [value]="dept">
+      {{ dept }}
+    </option>
+  </select>
+
+  <input 
+    type="number"
+    placeholder="Min Salary"
+    [(ngModel)]="minSalary"
+  />
+
+  <input 
+    type="number"
+    placeholder="Max Salary"
+    [(ngModel)]="maxSalary"
+  />
+
+    <button (click)="clearFilters()" class="secondary-btn">
+  Clear
+</button>
+</div>
+
+    <table *ngIf="!loading && filteredEmployees.length > 0">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+
+      <tr *ngFor="let emp of filteredEmployees">
+        <td>{{ emp.employeeId }}</td>
+        <td>{{ emp.name }}</td>
+        <td>{{ emp.email }}</td>
+        <td>
+          <button class="edit-btn" (click)="edit(emp)">Edit</button>
+          <button class="delete-btn" (click)="deleteEmployee(emp.employeeId)">Delete</button>
+        </td>
+      </tr>
+    </table>
+
+    <div *ngIf="!loading && filteredEmployees.length === 0">
+      No Employees Found
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="pagination">
+      <button (click)="prev()" [disabled]="page === 1">Prev</button>
+      <span>Page {{ page }}</span>
+      <button (click)="next()">Next</button>
+    </div>
+  </div>
+
+</div>
