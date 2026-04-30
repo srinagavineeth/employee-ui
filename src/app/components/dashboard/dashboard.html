@@ -1,92 +1,132 @@
-<div class="container">
+<div class="dashboard-shell">
+  <div class="bg-orb orb-one"></div>
+  <div class="bg-orb orb-two"></div>
 
-  <!-- FORM CARD -->
-  <div class="card">
-    <h2>{{ isEditMode ? 'Update Employee' : 'Add Employee' }}</h2>
+  <section class="hero card reveal-up">
+    <div class="hero-content">
+      <p class="eyebrow">Employee Workspace</p>
+      <h1>People Operations Dashboard</h1>
+      <p class="subtext">Manage onboarding, edits, and payroll visibility from a single control center.</p>
 
-    <div class="form-row">
-      <input type="text" placeholder="Name" [(ngModel)]="newEmployee.name">
-      <input type="email" placeholder="Email" [(ngModel)]="newEmployee.email">
-      <input type="text" placeholder="Department" [(ngModel)]="newEmployee.department">
-      <input type="number" placeholder="Salary" [(ngModel)]="newEmployee.salary">
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <span>Total</span>
+          <strong>{{ totalCount }}</strong>
+        </div>
+        <div class="stat-pill">
+          <span>Visible</span>
+          <strong>{{ filteredEmployees.length }}</strong>
+        </div>
+        <div class="stat-pill">
+          <span>Page</span>
+          <strong>{{ page }}</strong>
+        </div>
+      </div>
     </div>
 
-    <button (click)="submitEmployee()" class="primary-btn">
-      {{ isEditMode ? 'Update' : 'Add' }}
-    </button>
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </section>
 
-    <button *ngIf="isEditMode" (click)="resetForm()" class="secondary-btn">
-      Cancel
-    </button>
-  </div>
+  <section class="card form-card reveal-up delay-1">
+    <div class="card-head">
+      <h2>{{ isEditMode ? 'Update Employee' : 'Add Employee' }}</h2>
+      <p>Fill all details to keep employee records up to date.</p>
+    </div>
 
-  <!-- TABLE CARD -->
-  <div class="card">
-    <h2>Employees</h2>
+    <div class="form-grid">
+      <label>
+        <span>Name</span>
+        <input type="text" placeholder="Enter full name" [(ngModel)]="newEmployee.name" />
+      </label>
 
-    <div *ngIf="loading">Loading...</div>
+      <label>
+        <span>Email</span>
+        <input type="email" placeholder="name@company.com" [(ngModel)]="newEmployee.email" />
+      </label>
+
+      <label>
+        <span>Department</span>
+        <input type="text" placeholder="Eg. Engineering" [(ngModel)]="newEmployee.department" />
+      </label>
+
+      <label>
+        <span>Salary</span>
+        <input type="number" placeholder="Monthly salary" [(ngModel)]="newEmployee.salary" />
+      </label>
+    </div>
+
+    <div class="actions-row">
+      <button (click)="submitEmployee()" class="primary-btn">
+        {{ isEditMode ? 'Update Employee' : 'Add Employee' }}
+      </button>
+      <button *ngIf="isEditMode" (click)="resetForm()" class="secondary-btn">Cancel</button>
+    </div>
+  </section>
+
+  <section class="card table-card reveal-up delay-2">
+    <div class="table-head">
+      <div>
+        <h2>Employees</h2>
+        <p>Filter, search, and maintain your records instantly.</p>
+      </div>
+    </div>
 
     <div class="filters">
+      <input type="text" placeholder="Search by name/email" [(ngModel)]="searchText" />
 
-  <input 
-    type="text"
-    placeholder="Search name/email"
-    [(ngModel)]="searchText"
-  />
+      <select [(ngModel)]="selectedDepartment">
+        <option value="">All Departments</option>
+        <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+      </select>
 
-  <select [(ngModel)]="selectedDepartment">
-    <option value="">All Departments</option>
-    <option *ngFor="let dept of departments" [value]="dept">
-      {{ dept }}
-    </option>
-  </select>
+      <input type="number" placeholder="Min Salary" [(ngModel)]="minSalary" />
+      <input type="number" placeholder="Max Salary" [(ngModel)]="maxSalary" />
 
-  <input 
-    type="number"
-    placeholder="Min Salary"
-    [(ngModel)]="minSalary"
-  />
-
-  <input 
-    type="number"
-    placeholder="Max Salary"
-    [(ngModel)]="maxSalary"
-  />
-
-    <button (click)="clearFilters()" class="secondary-btn">
-  Clear
-</button>
-</div>
-
-    <table *ngIf="!loading && filteredEmployees.length > 0">
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Actions</th>
-      </tr>
-
-      <tr *ngFor="let emp of filteredEmployees">
-        <td>{{ emp.employeeId }}</td>
-        <td>{{ emp.name }}</td>
-        <td>{{ emp.email }}</td>
-        <td>
-          <button class="edit-btn" (click)="edit(emp)">Edit</button>
-          <button class="delete-btn" (click)="deleteEmployee(emp.employeeId)">Delete</button>
-        </td>
-      </tr>
-    </table>
-
-    <div *ngIf="!loading && filteredEmployees.length === 0">
-      No Employees Found
+      <button (click)="clearFilters()" class="secondary-btn">Clear</button>
     </div>
 
-    <!-- PAGINATION -->
+    <div class="loading" *ngIf="loading">
+      <div class="loader"></div>
+      <span>Loading employees...</span>
+    </div>
+
+    <div class="table-wrap" *ngIf="!loading && filteredEmployees.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th class="sortable" (click)="sortBy('employeeId')">ID <span>{{ getSortIndicator('employeeId') }}</span></th>
+            <th class="sortable" (click)="sortBy('name')">Name <span>{{ getSortIndicator('name') }}</span></th>
+            <th class="sortable" (click)="sortBy('email')">Email <span>{{ getSortIndicator('email') }}</span></th>
+            <th class="sortable" (click)="sortBy('department')">Department <span>{{ getSortIndicator('department') }}</span></th>
+            <th class="sortable" (click)="sortBy('salary')">Salary <span>{{ getSortIndicator('salary') }}</span></th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let emp of filteredEmployees">
+            <td>#{{ emp.employeeId }}</td>
+            <td class="name-cell">{{ emp.name }}</td>
+            <td>{{ emp.email }}</td>
+            <td><span class="dept-chip">{{ emp.department }}</span></td>
+            <td class="salary-cell">{{ emp.salary | currency:'INR':'symbol':'1.0-0' }}</td>
+            <td class="action-cell">
+              <button class="edit-btn" (click)="edit(emp)">Edit</button>
+              <button class="delete-btn" (click)="deleteEmployee(emp.employeeId)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="empty-state" *ngIf="!loading && filteredEmployees.length === 0">
+      <h3>No Employees Found</h3>
+      <p>Try adjusting the filters or add a new employee record.</p>
+    </div>
+
     <div class="pagination">
-      <button (click)="prev()" [disabled]="page === 1">Prev</button>
+      <button (click)="prev()" [disabled]="page === 1" class="secondary-btn">Prev</button>
       <span>Page {{ page }}</span>
-      <button (click)="next()">Next</button>
+      <button (click)="next()" class="primary-btn">Next</button>
     </div>
-  </div>
-
+  </section>
 </div>

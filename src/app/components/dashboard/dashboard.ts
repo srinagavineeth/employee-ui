@@ -29,6 +29,8 @@ export class Dashboard implements OnInit {
   minSalary: number | null = null;
   maxSalary: number | null = null;
   departments: string[] = [];
+  sortColumn: 'employeeId' | 'name' | 'email' | 'department' | 'salary' = 'employeeId';
+  sortDirection: 'asc' | 'desc' = 'asc';
 
   newEmployee = {
     name: '',
@@ -132,7 +134,7 @@ submitEmployee() {
   }
 }
 get filteredEmployees() {
-  return this.employees.filter(emp => {
+  const filtered = this.employees.filter(emp => {
 
     // 🔍 search
     const matchesSearch =
@@ -152,10 +154,43 @@ get filteredEmployees() {
 
     return matchesSearch && matchesDept && matchesMin && matchesMax;
   });
+
+  return [...filtered].sort((a, b) => {
+    const direction = this.sortDirection === 'asc' ? 1 : -1;
+    const valueA = a[this.sortColumn];
+    const valueB = b[this.sortColumn];
+
+    if (typeof valueA === 'string' && typeof valueB === 'string') {
+      return valueA.localeCompare(valueB) * direction;
+    }
+
+    return ((valueA ?? 0) - (valueB ?? 0)) * direction;
+  });
 }
+
+sortBy(column: 'employeeId' | 'name' | 'email' | 'department' | 'salary') {
+  if (this.sortColumn === column) {
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    return;
+  }
+
+  this.sortColumn = column;
+  this.sortDirection = 'asc';
+}
+
+getSortIndicator(column: 'employeeId' | 'name' | 'email' | 'department' | 'salary') {
+  if (this.sortColumn !== column) {
+    return '↕';
+  }
+
+  return this.sortDirection === 'asc' ? '↑' : '↓';
+}
+
 clearFilters() {
   this.searchText = '';
   this.selectedDepartment = '';
+  this.minSalary = null;
+  this.maxSalary = null;
 
   this.page = 1; // reset pagination
 
