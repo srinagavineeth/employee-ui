@@ -94,7 +94,7 @@ This project can be extended for:
 
 ---
 
-## 💬 Client Pitch (Use This)
+## 💬 Client Pitch
 
 "I can build a modern admin dashboard for your business with authentication, data management, filtering, and scalable UI using Angular and .NET. I’ve already built and deployed a working system — I can customize it to your needs quickly."
 
